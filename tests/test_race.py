@@ -58,7 +58,7 @@ def test_2022_TdF():
     assert len(results_st1.results_table) == 176
     assert results_st1.results_table['Rider'].iloc[0] == 'Yves Lampaert'
   
-#Itzulia uses the new style, stage race --> so no results_table
+#Itzulia uses the new style, stage race
 def test_2023_itzulia():
     race = Race(14244)
     r_2023 = race.edition(year=2023)
@@ -72,27 +72,27 @@ def test_2023_itzulia():
     assert 'mountain' in results_2023.standings
     assert 'youth' in results_2023.standings
 
-    r=r_2023.results(stage_num=1,classification_num=1)
+    r=r_2023.results(stage_num=1,classification_num=1).results_table
     assert len(r) == 97
     assert r['Rider'].iloc[0] == 'Demi Vollering'
     assert r['Time'].iloc[0] == "03:16:22"
     
-    r=r_2023.results(stage_num=1,classification_num=2)
+    r=r_2023.results(stage_num=1,classification_num=2).results_table
     assert len(r) == 23
     assert r['Rider'].iloc[0] == 'Ella Wyllie'
     assert r['Time'].iloc[0] == "03:19:38"
     
-    r=r_2023.results(stage_num=1,classification_num=3)
+    r=r_2023.results(stage_num=1,classification_num=3).results_table
     assert len(r) == 19
     assert r['Rider'].iloc[0] == 'Demi Vollering'
     assert r['Points'].iloc[0] == 25
     
-    r=r_2023.results(stage_num=1,classification_num=4)
+    r=r_2023.results(stage_num=1,classification_num=4).results_table
     assert len(r) == 7
     assert r['Rider'].iloc[0] == 'Demi Vollering'
     assert r['Points'].iloc[0] == 6
     
-    assert len(r_2023.results(stage_num=1,classification_num=8)) == 19
+    assert len(r_2023.results(stage_num=1,classification_num=8).results_table) == 19
 
 my_vcr.use_cassette() #Is it normal that it is no decorator???
 def test_2014_giro_rosa_prologue():
@@ -139,6 +139,6 @@ def test_2023_basque():
     
     assert len(results_2023.results_table) == 161
     assert results_2023.results_table['Rider'].iloc[0] == 'Jonas Vingegaard'
-    assert len(results_2023.standings['youth']) == 26
-    assert results_2023.standings['youth']['Rider'].iloc[0] == 'Brandon McNulty'
+    assert len(results_2023.standings['youth'].results_table) == 26
+    assert results_2023.standings['youth'].results_table['Rider'].iloc[0] == 'Brandon McNulty'
 
