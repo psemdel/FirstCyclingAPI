@@ -47,10 +47,6 @@ class RaceVictoryTable(RaceEndpoint):
 	def _get_victory_table(self):
 		victory_table = self.soup.find('table', {'class': 'tablesorter'})
 		self.table = parse_table(victory_table)
-
-class Standing():
-    def __init__(self, results_table):
-        self.results_table=results_table
         
 class RaceStageVictories(RaceEndpoint):
 	"""
@@ -69,10 +65,6 @@ class RaceStageVictories(RaceEndpoint):
 	def _get_stage_victory_table(self):
 		victory_table = self.soup.find('table', {'class': 'test tablesorter'}) # TODO test
 		self.table = parse_table(victory_table)
-
-class Standing():
-    def __init__(self, results_table):
-        self.results_table=results_table
         
 class RaceEditionResults(RaceEndpoint):
 	"""
@@ -107,9 +99,9 @@ class RaceEditionResults(RaceEndpoint):
 		else: #new race type
 		    divs = self.soup.find_all('div', {'class': "tab-content"}) #includes also tab-content results
             
-		self.standings= {div['id']: Standing(parse_table(div.table)) for div in divs}
+		self.standings= {div['id']: parse_table(div.table) for div in divs}
 		if not results_table:
-		    self.results_table = self.standings[divs[0]['id']].results_table #first appearing is the result
+		    self.results_table = self.standings[divs[0]['id']] #first appearing is the result
 
 	def _get_sidebar_information(self): # TODO
 		return

@@ -48,12 +48,13 @@ def test_combi_2023_itzulia():
     assert 'youth' in t.standings
     
     t = combi_results_startlist(14244,2023,stage_num=1,classification_num=1)
-    assert t.results_table['Rider'].iloc[0] == 'Demi Vollering'
-    assert t.results_table['BIB'].iloc[0] ==1
+    assert t['Rider'].iloc[0] == 'Demi Vollering'
+    assert t['BIB'].iloc[0] ==1
     
     t = combi_results_startlist(14244,2023,stage_num=1,classification_num=3)
-    assert t.results_table['Rider'].iloc[0] == 'Demi Vollering'
-    assert t.results_table['BIB'].iloc[0] ==1
+    print(t)
+    assert t['Rider'].iloc[0] == 'Demi Vollering'
+    assert t['BIB'].iloc[0] ==1
     
 def test_combi_2023_gracia(): 
     t = combi_results_startlist(9549,2023,stage_num=3)
@@ -68,7 +69,8 @@ def test_combi_2023_gracia():
     assert 'youth' in t.standings
     
     t = combi_results_startlist(9549,2023,stage_num=3,classification_num=3)
-    assert t.results_table['Rider'].iloc[0] == 'Dominika Wlodarczyk'
+    print(t)
+    assert t['Rider'].iloc[0] == 'Dominika Wlodarczyk'
     
 def test_giro_donne_2001():
     t = combi_results_startlist(9064,2001,stage_num=1)

@@ -11,18 +11,24 @@ def combi_results_startlist(race_id, year,**kwargs):
     try:
         r=RaceEdition(race_id=race_id,year=year)
         t=r.results(**kwargs)
-        
-        if t.results_table is None: 
-            #case of race not completed yet
-            r=RaceEdition(race_id=race_id,year=year)
-            kwargs.update(stage_num=1)
-            t=r.results(**kwargs)
-        if t.results_table is None or not "Inv name" in t.results_table.columns:    
-            #fallback TTT
-            kwargs.update(stage_num=2)
-            t=r.results(**kwargs)
             
-        results_table=t.results_table
+        if t is None:
+            if "results_table" in t.__dir__() and t.results_table is None: 
+                #case of race not completed yet
+                r=RaceEdition(race_id=race_id,year=year)
+                kwargs.update(stage_num=1)
+                t=r.results(**kwargs)
+        if t is None:
+            if "results_table" in t.__dir__() and (t.results_table is None or not "Inv name" in t.results_table.columns):    
+                #fallback TTT
+                kwargs.update(stage_num=2)
+                t=r.results(**kwargs)
+        
+        if "results_table" in t.__dir__():
+            results_table=t.results_table
+        else:
+            results_table=t
+        
         start_list=r.startlist()
         
         """ Convert HTML table from bs4 to pandas DataFrame. Return None if no data. """
