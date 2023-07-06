@@ -57,6 +57,16 @@ def test_2022_TdF():
     results_st1 = tdf_2022.results(stage_num=1)
     assert len(results_st1.results_table) == 176
     assert results_st1.results_table['Rider'].iloc[0] == 'Yves Lampaert'
+
+def test_2004_giro():
+    giro= Race(9064)
+    giro_2004 = giro.edition(year=2004)
+    results_2004 = giro_2004.results()
+    #assert len(results_2022.results_table) == 176
+    assert results_2004.results_table['Rider'].iloc[0] == 'Nicole Cooke'
+    assert results_2004.results_table['Time'].iloc[0] == "21:33:11"
+    assert results_2004.results_table['Pos'].iloc[0] == "01"
+
   
 #Itzulia uses the new style, stage race
 def test_2023_itzulia():

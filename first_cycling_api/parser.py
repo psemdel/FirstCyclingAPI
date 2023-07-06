@@ -112,13 +112,18 @@ def parse_table(table):
                    #reverse order of name
    			    for ii in range(len(series)):
    			        t=[s.text for s in series[ii].find_all("span")]
+                       
    			        if len(t)>0:
-   			            last_name=t[0]
+   			            if t[0]=="": #flag
+   			                last_name=t[1]
+   			                print(last_name)
+   			            else:
+   			                last_name=t[0]
+                        
+                        #remove empty spaces
    			            while len(last_name)>0 and last_name[-1]==" ":
    			                last_name=last_name[:-1]
-                           
    			            first_name=out_df["Rider"].values[ii][len(last_name)+1:]
-                           
    			            #if first_name.find("[*]")!=-1: #for disqualification
    			            #    first_name=first_name[0:first_name.find("[*]")]+first_name[first_name.find("[*]")+3:]
    			            #while first_name.find("  ")!=-1:
