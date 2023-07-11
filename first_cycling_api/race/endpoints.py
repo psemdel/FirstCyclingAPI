@@ -102,12 +102,9 @@ class RaceEditionResults(RaceEndpoint):
 		if results_table: #old race type
 		    self.results_table = parse_table(results_table)
     
-    		# Load all classification standings after stage
-		    divs = self.soup.find_all('div', {'class': "tab-content dummy"})
-		else: #new race type
-		    divs = self.soup.find_all('div', {'class': "tab-content"}) #includes also tab-content results
-            
+		divs = self.soup.find_all('div', {'class': "tab-content"}) #includes also tab-content results
 		self.standings= {div['id']: Standing(parse_table(div.table)) for div in divs}
+        
 		if not results_table:
 		    self.results_table = self.standings[divs[0]['id']].results_table #first appearing is the result
 

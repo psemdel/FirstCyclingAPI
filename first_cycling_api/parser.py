@@ -61,7 +61,7 @@ def parse_table(table):
    	# TODO for rider results, format dates nicely with hidden column we are throwing away
    	# Load pandas DataFrame from raw text only
    	out_df = pd.read_html(str(table), decimal=',')[0]
-   
+
    	if out_df.iat[0, 0] == 'No data': # No data
    		return None
    
@@ -116,7 +116,6 @@ def parse_table(table):
    			        if len(t)>0:
    			            if t[0]=="": #flag
    			                last_name=t[1]
-   			                print(last_name)
    			            else:
    			                last_name=t[0]
                         
@@ -124,10 +123,6 @@ def parse_table(table):
    			            while len(last_name)>0 and last_name[-1]==" ":
    			                last_name=last_name[:-1]
    			            first_name=out_df["Rider"].values[ii][len(last_name)+1:]
-   			            #if first_name.find("[*]")!=-1: #for disqualification
-   			            #    first_name=first_name[0:first_name.find("[*]")]+first_name[first_name.find("[*]")+3:]
-   			            #while first_name.find("  ")!=-1:
-   			            #    first_name=first_name.replace("  "," ")
                                
    			            out_df["Rider"].values[ii]=first_name+" "+last_name
    			        else:

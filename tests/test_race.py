@@ -31,7 +31,7 @@ def test_2022_TdF():
     assert results_2022.results_table['Rider'].iloc[0] == 'Jonas Vingegaard'
     assert results_2022.results_table['Time'].iloc[0] == "79:33:20"
     assert results_2022.results_table['Pos'].iloc[0] == "01"
-
+    
     r=tdf_2022.results(classification_num=1).results_table
     assert len(r) == 176
     assert r['Rider'].iloc[0] == 'Jonas Vingegaard'
@@ -51,11 +51,33 @@ def test_2022_TdF():
     assert len(r) == 55
     assert r['Rider'].iloc[0] == 'Jonas Vingegaard'
     assert r['Points'].iloc[0] == 72
-   
+
     assert len(tdf_2022.results(classification_num=8).results_table) == 22
 
     results_st1 = tdf_2022.results(stage_num=1)
     assert len(results_st1.results_table) == 176
+    assert results_st1.results_table['Rider'].iloc[0] == 'Yves Lampaert'
+    
+    assert 'sta' in results_st1.standings
+    assert 'gc' in results_st1.standings
+    assert 'youth' in results_st1.standings
+    assert 'point' in results_st1.standings
+    assert 'teamcomp' in results_st1.standings
+    
+    results_st1 = tdf_2022.results(stage_num=1,classification_num=1)
+    assert len(results_st1.results_table) == 175
+    assert results_st1.results_table['Rider'].iloc[0] == 'Yves Lampaert'
+    
+    results_st1 = tdf_2022.results(stage_num=1,classification_num=1)
+    assert len(results_st1.results_table) == 175
+    assert results_st1.results_table['Rider'].iloc[0] == 'Yves Lampaert'
+    
+    results_st1 = tdf_2022.results(stage_num=1,classification_num=2)
+    assert len(results_st1.results_table) == 27
+    assert results_st1.results_table['Rider'].iloc[0] == 'Tadej Pogacar'
+
+    results_st1 = tdf_2022.results(stage_num=1,classification_num=3)
+    assert len(results_st1.results_table) == 15
     assert results_st1.results_table['Rider'].iloc[0] == 'Yves Lampaert'
 
 def test_2004_giro():
@@ -66,8 +88,26 @@ def test_2004_giro():
     assert results_2004.results_table['Rider'].iloc[0] == 'Nicole Cooke'
     assert results_2004.results_table['Time'].iloc[0] == "21:33:11"
     assert results_2004.results_table['Pos'].iloc[0] == "01"
-
-  
+    
+    results_st1 = giro_2004.results(stage_num=1)
+    assert results_st1.results_table['Rider'].iloc[0] == 'Oenone Wood' #stage winner
+    results_st1 = giro_2004.results(stage_num=1, classification_num=1)
+    assert results_st1.results_table['Rider'].iloc[0] == 'Diana Ziliute' #gc leader  
+    
+def test_2005_giro():
+    giro= Race(9064)
+    giro_2005 = giro.edition(year=2005)
+    results_2005 = giro_2005.results()
+    #assert len(results_2022.results_table) == 176
+    assert results_2005.results_table['Rider'].iloc[0] == 'Nicole Brändli'
+    assert results_2005.results_table['Time'].iloc[0] == "22:08:34"
+    assert results_2005.results_table['Pos'].iloc[0] == "01"
+    
+    results_st1 = giro_2005.results(stage_num=0)
+    assert results_st1.results_table['Rider'].iloc[0] == 'Nicole Brändli' #stage winner
+    results_st1 = giro_2005.results(stage_num=0, classification_num=1)
+    assert results_st1.results_table['Rider'].iloc[0] == 'Nicole Brändli' #gc leader  
+    
 #Itzulia uses the new style, stage race
 def test_2023_itzulia():
     race = Race(14244)

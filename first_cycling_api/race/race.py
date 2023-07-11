@@ -139,15 +139,18 @@ class RaceEdition(FirstCyclingObject):
 		-------
 		RaceEditionResults
 		"""
-		zero_padded_stage_num = f'{stage_num:02}' if isinstance(stage_num, int) else None
-		self.res=self._get_endpoint(endpoint=RaceEditionResults, l=classification_num, e=zero_padded_stage_num)
+		try:
+		    zero_padded_stage_num = f'{stage_num:02}' if isinstance(stage_num, int) else None
+		    self.res=self._get_endpoint(endpoint=RaceEditionResults, l=classification_num, e=zero_padded_stage_num)
         
-		if classification_num is None:
-		    return self.res     
-		elif len(self.res.standings)==0: #not a special classification or old style race 
-		    check=self._get_endpoint(endpoint=RaceEditionResults, e=zero_padded_stage_num) 
+		    if classification_num is None:
+		        return self.res     
+		    elif len(self.res.standings)==0: #not a special classification or old style race 
+		        check=self._get_endpoint(endpoint=RaceEditionResults, e=zero_padded_stage_num) 
             #check if not identical
-		    if ((not (classification_num==1 and stage_num==0)) and
+		        if ((not (classification_num==1 and stage_num==-1)) and #stage_num=-1 is convention for main race
+               (check.results_table is not None) and
+               (self.res.results_table is not None) and
                ("Rider" in check.results_table) and
                ("Rider" in self.res.results_table) and
                (len(check.results_table["Rider"].values)==len(self.res.results_table["Rider"].values)) and
@@ -155,20 +158,26 @@ class RaceEdition(FirstCyclingObject):
                 ("Time" in self.res.results_table) and ("Time" in check.results_table) and 
                 (len(check.results_table["Time"].values)==len(self.res.results_table["Time"].values)) and
                np.all(np.equal(check.results_table["Time"].values,self.res.results_table["Time"].values))):
+                
 		            print("classification " + str(classifications_inv[classification_num])+" seems not to be available on first cycling, interrupted")
 		            return None
 
-		    return self.res          
-		else: #new style race, other classification are saved in standings
-		    if classification_num not in classifications_inv:
-		        raise ValueError("classification_num " + str(classification_num) + " not supported")
+		        return self.res          
+		    else: #new style race, or stage of old style race, other classification are saved in standings
+		        if classification_num not in classifications_inv:
+		            raise ValueError("classification_num " + str(classification_num) + " not supported")
         
-		    if classifications_inv[classification_num] in self.res.standings:
-		        return self.res.standings[classifications_inv[classification_num]]
-		    else:
-		        print("classification " + str(classifications_inv[classification_num])+" not found")
-		        return None
-
+		        if classifications_inv[classification_num] in self.res.standings:
+		            return self.res.standings[classifications_inv[classification_num]]
+		        else:
+		            print("classification " + str(classifications_inv[classification_num])+" not found")
+		            return None
+		except Exception as msg:
+		    import sys
+		    _, _, exc_tb = sys.exc_info()
+		    print("race failed line " + str(exc_tb.tb_lineno))
+		    print(msg)
+		        
 	def stage_profiles(self):
 		"""
 		Get race edition stage profiles.
