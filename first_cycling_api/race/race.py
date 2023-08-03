@@ -141,7 +141,12 @@ class RaceEdition(FirstCyclingObject):
 		"""
 		try:
 		    zero_padded_stage_num = f'{stage_num:02}' if isinstance(stage_num, int) else None
-		    self.res=self._get_endpoint(endpoint=RaceEditionResults, l=classification_num, e=zero_padded_stage_num)
+		    try:
+		        self.res=self._get_endpoint(endpoint=RaceEditionResults, l=classification_num, e=zero_padded_stage_num)
+		    except:
+		        self.res=None
+		        print("classification " + str(classifications_inv[classification_num])+" not found")
+		        return None
         
 		    if classification_num is None:
 		        return self.res     

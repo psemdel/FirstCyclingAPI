@@ -31,16 +31,16 @@ def combi_results_startlist(
 	try:
 	    r=RaceEdition(race_id=race_id,year=year)
 	    t=r.results(classification_num=classification_num,stage_num=stage_num)
-        
-	    if t is None or (("results_table" in t.__dir__()) and t.results_table is None): 
+
+	    if (t is None or (("results_table" in t.__dir__()) and t.results_table is None)) and stage_num is not None: 
             #case of race not completed yet
 	        r=RaceEdition(race_id=race_id,year=year)
 	        t=r.results(classification_num=classification_num,stage_num=1)
-	    if t is None or (("results_table" in t.__dir__()) and t.results_table is None) or not "Inv name" in t.results_table.columns:    
+	    if (t is None or (("results_table" in t.__dir__()) and (t.results_table is None or not "Inv name" in t.results_table.columns))) and stage_num is not None:    
             #fallback TTT
 	        t=r.results(classification_num=classification_num,stage_num=2)
-        
-	    if "results_table" in t.__dir__():
+
+	    if "results_table" in t.__dir__() and t.results_table is not None:
 	        results_table=t.results_table
 	        start_list=r.startlist()
             
