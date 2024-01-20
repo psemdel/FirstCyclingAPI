@@ -21,3 +21,18 @@ def test_2018_women_junior_fc_ranking():
 	ranking = Ranking(k='fc', rank='wjr', y=2018)
 	assert len(ranking.table) == 100
 	assert ranking.table['Points'].iloc[0] == 2286
+
+def test_2023_european_ranking():
+	ranking = Ranking(h=1, rank=5, y="2023-42") #
+	assert len(ranking.table) == 100
+	assert ranking.table['Points'].iloc[-1] == 75
+    
+def test_2023_asian_ranking():
+	ranking = Ranking(h=1, rank=6, y="2023-42") #
+	assert len(ranking.table) == 100
+	assert ranking.table['Points'].iloc[0] == 1485 
+    
+def test_2023_africa_ranking():
+	ranking = Ranking(h=1, rank=4, y="2023-42") #
+	assert len(ranking.table) == 100
+	assert ranking.table['Points'].iloc[0] == 869

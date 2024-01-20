@@ -5,6 +5,7 @@ Parser
 Provides useful functions to parse API responses.
 """
 import pandas as pd
+import numbers
 # Parsing dates ----
 
 def parse_date(date_text):
@@ -70,8 +71,14 @@ def parse_table(table):
    	thousands_cols = ['Points']
    	for col in thousands_cols:
    		if col in out_df:
-   			out_df[col] = out_df[col].astype(str).str.replace('.', '', regex=False).astype(int)
-   
+   			out_df[col]=out_df[col].astype(str) 
+   			for i in out_df.index:
+  			    if out_df[col].loc[i].find("(")!=-1:
+   			        out_df.loc[i,col]=out_df.loc[i, col][:out_df.loc[i,col].find("(")]
+  			    if out_df[col].loc[i][-2:]==".0":
+   			        out_df.loc[i, col]=out_df.loc[i, col].replace('.0', '') #to avoid that the .0 becomes 0
+   			out_df[col] = out_df[col].str.replace('.', '', regex=False).astype(int)
+
    	# Parse soup to add information hidden in tags/links
    	if len([th.text for th in table.tr.find_all('th')])==0: #bug with youth, as a <tr> is missing
    		trs = table.find_all('tr')[0:]
