@@ -15,7 +15,10 @@ def combi_results_startlist(
         ):
 	"""
     Combine the result and the start list
-
+    
+    Important to understand: basis is the result table as it is easy to interpret (one line = one rider with team included)
+    The startlist is added afterwards, as it more difficult to interpret (riders listed below a team name)
+    
 	Attributes
 	----------
 	race_id: int
@@ -32,13 +35,20 @@ def combi_results_startlist(
 	    r=RaceEdition(race_id=race_id,year=year)
 	    t=r.results(classification_num=classification_num,stage_num=stage_num)
 
-	    if (t is None or (("results_table" in t.__dir__()) and t.results_table is None)) and stage_num is not None: 
-            #case of race not completed yet
-	        r=RaceEdition(race_id=race_id,year=year)
-	        t=r.results(classification_num=classification_num,stage_num=1)
-	    if (t is None or (("results_table" in t.__dir__()) and (t.results_table is None or not "Inv name" in t.results_table.columns))) and stage_num is not None:    
-            #fallback TTT
-	        t=r.results(classification_num=classification_num,stage_num=2)
+	    if stage_num is None and classification_num is None: #fallback only for startlist
+	        if (t is None or (("results_table" in t.__dir__()) and 
+                           (t.results_table is None or not str(t.results_table.iloc[0]["Pos"]).isnumeric()) #DNF as first, means the race is not finished
+               )): 
+	            print("fallback 1")
+                #case of race not completed yet
+	            r=RaceEdition(race_id=race_id,year=year)
+	            t=r.results(classification_num=classification_num,stage_num=1)
+	        if (t is None or (("results_table" in t.__dir__()) and 
+                           (t.results_table is None or not "Inv name" in t.results_table.columns 
+                            or not str(t.results_table.iloc[0]["Pos"]).isnumeric()))):    
+                #fallback TTT as first stage
+	            print("fallback 2")            
+	            t=r.results(classification_num=classification_num,stage_num=2)
 
 	    if "results_table" in t.__dir__() and t.results_table is not None:
 	        results_table=t.results_table
