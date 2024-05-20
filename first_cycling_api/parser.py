@@ -103,11 +103,17 @@ def parse_table(table):
    	try:
    	    soup_df = pd.DataFrame([tr.find_all('td') for tr in trs], columns=headers)
    	except Exception as msg:
-   	    print(msg)
-   	    print("A cause can be that the race is not completed yet")
-   	    return None
-   
-   
+   		try: 
+            #Empty time bug on the side of First Cycling
+   			heads=headers[:-2]   
+   			heads.append(headers[-1])
+   			soup_df = pd.DataFrame([tr.find_all('td') for tr in trs], columns=heads)
+   			out_df["Time"]=out_df[out_df.columns[-2]]
+   		except:
+   			print(msg)
+   			print("A cause can be that the race is not completed yet")
+   			return None
+
    	# Add information hidden in tags
    	for col, series in soup_df.items():
    		if col in ('Rider', 'Winner', 'Second', 'Third'):
@@ -157,8 +163,8 @@ def parse_table(table):
    			except AttributeError:
    				pass
    
+
    	out_df = out_df.replace({'-': None}).dropna(how='all', axis=1)
-   
    	# TODO Remove Unnamed columns
    	
    	return out_df
